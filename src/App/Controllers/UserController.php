@@ -23,6 +23,6 @@ class  UserController extends Controller
             return $response->withJson(['code' => 1]);
         }
 
-        return $this->renderer->render($response, 'user/login.phtml');
+        return $this->view->render($response, 'user/login.twig');
     }
 }

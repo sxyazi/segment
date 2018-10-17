@@ -15,6 +15,21 @@ $container['db'] = function ($container) {
     return $capsule;
 };
 
+// twig-view
+$container['view'] = function ($c) {
+    $settings = $c->get('settings')['view'];
+
+    $view = new \Slim\Views\Twig($settings['template_path'], [
+        'cache' => $settings['cache_path']
+    ]);
+
+    // Instantiate and add Slim specific extension
+    $basePath = rtrim(str_ireplace('index.php', '', $c->get('request')->getUri()->getBasePath()), '/');
+    $view->addExtension(new Slim\Views\TwigExtension($c->get('router'), $basePath));
+
+    return $view;
+};
+
 // view renderer
 $container['renderer'] = function ($c) {
     $settings = $c->get('settings')['renderer'];

@@ -7,8 +7,13 @@ use Slim\Http\Response;
 
 $app->get('/', 'App\Controllers\HomeController:index');
 
-$app->get('/login', 'App\Controllers\UserController:login');
+// 登录
+$app->get('/login', 'App\Controllers\UserController:login')->setName('login');
 $app->post('/login', 'App\Controllers\UserController:login');
+
+// 首页
+$app->get('/home', 'App\Controllers\HomeController:index')->setName('home');
+
 
 //
 //$app->get('/[{name}]', function (Request $request, Response $response, array $args) {
