@@ -25,7 +25,7 @@
                     <input class="form-input" type="text" name="name" placeholder="用户名">
                 </div>
                 <div class="form-group">
-                    <input class="form-input" type="text" name="password" placeholder="密码">
+                    <input class="form-input" type="password" name="password" placeholder="密码">
                 </div>
                 <div class="form-control text-right">
                     <button class="btn btn-primary">Login</button>
@@ -40,11 +40,11 @@
         $('form').submit(function () {
             $.post('{{ path_for('login') }}', $(this).serialize(), function (res) {
                 if (res.code === 0) {
-                    alert(res.msg);
+                    $.notify(res.msg, 'error');
                     return;
                 }
 
-                location.href = '{{ path_for('home') }}';
+                location.href = '{{ path_for('cards.index') }}';
             });
 
             return false;

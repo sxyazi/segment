@@ -11,9 +11,13 @@ $app->get('/', 'App\Controllers\HomeController:index');
 $app->get('/login', 'App\Controllers\UserController:login')->setName('login');
 $app->post('/login', 'App\Controllers\UserController:login');
 
-// 首页
-$app->get('/home', 'App\Controllers\HomeController:index')->setName('home');
+// 卡片
+$app->group('/cards', function () {
 
+    $this->get('', 'App\Controllers\CardController:index')->setName('cards.index');
+    $this->get('/{id}', 'App\Controllers\CardController:show')->setName('cards.show');
+
+})->add(new \App\Middleware\mustLogin($app->getContainer()->router));
 
 //
 //$app->get('/[{name}]', function (Request $request, Response $response, array $args) {

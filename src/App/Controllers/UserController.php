@@ -20,6 +20,7 @@ class  UserController extends Controller
                 return $response->withJson(['code' => 0, 'msg' => '密码错误！']);
             }
 
+            $_SESSION['user'] = $user;
             return $response->withJson(['code' => 1]);
         }
 

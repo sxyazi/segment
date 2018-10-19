@@ -1,0 +1,95 @@
+{% extends 'main.twig' %}
+
+{% block head %}
+    <title>卡片室</title>
+    <style>
+        h1 {
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e4e4e4;
+        }
+
+        main {
+            width: 70%;
+            margin: 40px auto;
+        }
+
+        .card-list {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .card-list .column {
+            margin-bottom: 16px;
+        }
+
+        .card-list .card:hover {
+            cursor: pointer;
+            background: #f0f1f4;
+        }
+
+        .card-list .add-card i {
+            margin-right: 6px;
+        }
+
+        .card-list .add-card i, .card-list .add-card span {
+            vertical-align: middle;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <main>
+        <h1>卡片室</h1>
+        <div class="container card-list">
+            <div class="columns">
+                <div class="column col-3">
+                    <div class="card" data-id="1">
+                        <div class="card-body">卡片 1</div>
+                    </div>
+                </div>
+                <div class="column col-3">
+                    <div class="card">
+                        <div class="card-body">卡片 1</div>
+                    </div>
+                </div>
+                <div class="column col-3">
+                    <div class="card">
+                        <div class="card-body">卡片 1</div>
+                    </div>
+                </div>
+                <div class="column col-3">
+                    <div class="card">
+                        <div class="card-body">卡片 1</div>
+                    </div>
+                </div>
+                <div class="column col-3">
+                    <div class="card">
+                        <div class="card-body">卡片 1</div>
+                    </div>
+                </div>
+                <div class="column col-3">
+                    <div class="card add-card">
+                        <div class="card-body">
+                            <a href="#add-card">
+                                <i class="icon icon-plus"></i><span>添加新卡片</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block foot %}
+    <script>
+        $('.card').click(function () {
+            if ($(this).hasClass('add-card')) {
+                return;
+            }
+
+            location.href = '{{ path_for('cards.show', { 'id': '' }) }}' + $(this).data('id');
+        });
+    </script>
+{% endblock %}

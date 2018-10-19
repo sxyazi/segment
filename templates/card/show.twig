@@ -1,0 +1,124 @@
+{% extends 'main.twig' %}
+
+{% block head %}
+    <title>卡片 1</title>
+    <style>
+        h1 {
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e4e4e4;
+        }
+
+        main {
+            width: 70%;
+            margin: 40px auto;
+        }
+
+        .card-list .card {
+            margin-bottom: 16px;
+        }
+
+        .card-list .card:hover {
+            cursor: pointer;
+            background: #f0f1f4;
+        }
+
+        .card-add-item {
+            padding: 10px;
+            font-size: 18px;
+            margin-top: 100px;
+            text-align: center;
+            border: 1px solid transparent;
+        }
+
+        .card-add-item:hover {
+            cursor: pointer;
+            border: 1px solid #e7e9ed;
+        }
+
+        .card-add-item i {
+            margin-right: 5px;
+        }
+
+        .card-add-item i, .card-add-item a {
+            color: gray;
+            text-decoration: none;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <main>
+        <h1>卡片 1</h1>
+        <div class="card-list">
+            <div class="card" data-id="1" data-content="如果幸福是有形状的，会是什么样的呢？也许和玻璃一样吧。因为平时不会察觉，但它确实存在着，其证据就是，只要稍微改变观察的角度，它就会反映出光芒，比任何事物都更雄辩地论证自己的存在。温馨的世界就在咫尺，在透明的玻璃里，一直到永远······">
+                <div class="card-body">
+                    如果幸福是有形状的，会是什么样的呢？也许和玻璃一样吧。因为平时不会察觉，但它确实存在着，其证据就是，只要稍微改变观察的角度，它就会反映出光芒，比任何事物都更雄辩地论证自己的存在。温馨的世界就在咫尺，在透明的玻璃里，一直到永远······
+                </div>
+            </div>
+            <div class="card" data-id="2" data-content="从那天开始，我就一直在撒谎，活着是谎言，名字是谎言，经历也是谎言，都是谎言。我早已厌倦了这个毫不改变的世界，但这谎言让人绝望到想放弃都不行了，但我得到了力量。">
+                <div class="card-body">
+                    从那天开始，我就一直在撒谎，活着是谎言，名字是谎言，经历也是谎言，都是谎言。我早已厌倦了这个毫不改变的世界，但这谎言让人绝望到想放弃都不行了，但我得到了力量。
+                </div>
+            </div>
+        </div>
+        <div class="card-add-item">
+            <i class="icon icon-plus"></i> <a href="#modal-add-item">为卡片添加新项目</a>
+        </div>
+    </main>
+
+    <div class="modal" id="modal-add-item">
+        <a href="#close" class="modal-overlay"></a>
+        <div class="modal-container">
+            <div class="modal-header">
+                <a href="#close" class="btn btn-clear float-right"></a>
+                <div class="modal-title h5">新项目</div>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST">
+                    <div class="form-group">
+                        <label class="form-label" for="add-content">内容</label>
+                        <textarea class="form-input" id="add-content" name="content" rows="5"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary">添加</button>
+                <a class="btn btn-link" href="#close">关闭</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="modal-edit-item">
+        <a href="#close" class="modal-overlay"></a>
+        <div class="modal-container">
+            <div class="modal-header">
+                <a href="#close" class="btn btn-clear float-right"></a>
+                <div class="modal-title h5">编辑项目</div>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST">
+                    <div class="form-group">
+                        <label class="form-label" for="edit-content">内容</label>
+                        <textarea class="form-input" id="edit-content" name="content" rows="5"></textarea>
+                    </div>
+                    <input type="hidden" id="edit-id" name="id">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary">保存</button>
+                <a class="btn btn-link" href="#close">关闭</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block foot %}
+    <script>
+        $('.card-list .card').click(function () {
+            $('#edit-id').val($(this).data('id'));
+            $('#edit-content').val($(this).data('content'));
+            location.hash = '#modal-edit-item';
+        });
+    </script>
+{% endblock %}
