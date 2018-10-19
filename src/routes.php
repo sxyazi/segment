@@ -15,7 +15,10 @@ $app->post('/login', 'App\Controllers\UserController:login');
 $app->group('/cards', function () {
 
     $this->get('', 'App\Controllers\CardController:index')->setName('cards.index');
-    $this->get('/{id}', 'App\Controllers\CardController:show')->setName('cards.show');
+    $this->post('', 'App\Controllers\CardController:store')->setName('cards.store');
+    $this->get('/{id}/items', 'App\Controllers\ItemController:index')->setName('items.index');
+    $this->post('/{id}/items', 'App\Controllers\ItemController:store')->setName('items.store');
+    $this->put('/{id}/items', 'App\Controllers\ItemController:update')->setName('items.update');
 
 })->add(new \App\Middleware\mustLogin($app->getContainer()->router));
 

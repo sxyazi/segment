@@ -51,64 +51,60 @@
     <main>
         <h1>卡片 1</h1>
         <div class="card-list">
-            <div class="card" data-id="1" data-content="如果幸福是有形状的，会是什么样的呢？也许和玻璃一样吧。因为平时不会察觉，但它确实存在着，其证据就是，只要稍微改变观察的角度，它就会反映出光芒，比任何事物都更雄辩地论证自己的存在。温馨的世界就在咫尺，在透明的玻璃里，一直到永远······">
-                <div class="card-body">
-                    如果幸福是有形状的，会是什么样的呢？也许和玻璃一样吧。因为平时不会察觉，但它确实存在着，其证据就是，只要稍微改变观察的角度，它就会反映出光芒，比任何事物都更雄辩地论证自己的存在。温馨的世界就在咫尺，在透明的玻璃里，一直到永远······
+            {% for v in items %}
+                <div class="card" data-id="{{ v.id }}" data-content="{{ v.content }}">
+                    <div class="card-body">{{ v.content }}</div>
                 </div>
-            </div>
-            <div class="card" data-id="2" data-content="从那天开始，我就一直在撒谎，活着是谎言，名字是谎言，经历也是谎言，都是谎言。我早已厌倦了这个毫不改变的世界，但这谎言让人绝望到想放弃都不行了，但我得到了力量。">
-                <div class="card-body">
-                    从那天开始，我就一直在撒谎，活着是谎言，名字是谎言，经历也是谎言，都是谎言。我早已厌倦了这个毫不改变的世界，但这谎言让人绝望到想放弃都不行了，但我得到了力量。
-                </div>
-            </div>
+            {% endfor %}
         </div>
         <div class="card-add-item">
-            <i class="icon icon-plus"></i> <a href="#modal-add-item">为卡片添加新项目</a>
+            <i class="icon icon-plus"></i> <a href="#add-item">为卡片添加新项目</a>
         </div>
     </main>
 
-    <div class="modal" id="modal-add-item">
+    <div class="modal" id="add-item">
         <a href="#close" class="modal-overlay"></a>
         <div class="modal-container">
             <div class="modal-header">
                 <a href="#close" class="btn btn-clear float-right"></a>
                 <div class="modal-title h5">新项目</div>
             </div>
-            <div class="modal-body">
-                <form action="" method="POST">
+            <form action="">
+                <div class="modal-body">
                     <div class="form-group">
                         <label class="form-label" for="add-content">内容</label>
                         <textarea class="form-input" id="add-content" name="content" rows="5"></textarea>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary">添加</button>
-                <a class="btn btn-link" href="#close">关闭</a>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary">添加</button>
+                    <a class="btn btn-link" href="#close">关闭</a>
+                </div>
+            </form>
         </div>
     </div>
 
-    <div class="modal" id="modal-edit-item">
+    <div class="modal" id="edit-item">
         <a href="#close" class="modal-overlay"></a>
         <div class="modal-container">
             <div class="modal-header">
                 <a href="#close" class="btn btn-clear float-right"></a>
                 <div class="modal-title h5">编辑项目</div>
             </div>
-            <div class="modal-body">
-                <form action="" method="POST">
+            <form action="">
+                <div class="modal-body">
                     <div class="form-group">
                         <label class="form-label" for="edit-content">内容</label>
                         <textarea class="form-input" id="edit-content" name="content" rows="5"></textarea>
                     </div>
                     <input type="hidden" id="edit-id" name="id">
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary">保存</button>
-                <a class="btn btn-link" href="#close">关闭</a>
-            </div>
+                    <input type="hidden" name="_METHOD" value="PUT">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary">保存</button>
+                    <a class="btn btn-link" href="#close">关闭</a>
+                </div>
+            </form>
         </div>
     </div>
 {% endblock %}
@@ -118,7 +114,33 @@
         $('.card-list .card').click(function () {
             $('#edit-id').val($(this).data('id'));
             $('#edit-content').val($(this).data('content'));
-            location.hash = '#modal-edit-item';
+            location.hash = '#edit-item';
+        });
+
+        $('#add-item form').submit(function () {
+            $.post('{{ path_for('items.store', { 'id': card_id }) }}', $(this).serialize(), function (res) {
+                location.hash = '';
+                if (res.code === 1) {
+                    $.notify('添加成功');
+                } else {
+                    $.notify('添加失败', 'error');
+                }
+            });
+
+            return false;
+        });
+
+        $('#edit-item form').submit(function () {
+            $.post('{{ path_for('items.update', { 'id': card_id }) }}', $(this).serialize(), function (res) {
+                location.hash = '';
+                if (res.code === 1) {
+                    $.notify('修改成功');
+                } else {
+                    $.notify('修改失败', 'error');
+                }
+            });
+
+            return false;
         });
     </script>
 {% endblock %}

@@ -2,18 +2,27 @@
 
 namespace App\Controllers;
 
+use App\Models\Card;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
 class CardController extends Controller
 {
+    // 卡片列表
     public function index(Request $request, Response $response, array $args)
     {
-        return $this->view->render($response, 'card/index.twig');
+        $cards = Card::where('user_id', $_SESSION['user']->id)->get();
+        return $this->view->render($response, 'card/index.twig', compact('cards'));
     }
 
-    public function show(Request $request, Response $response, array $args)
+    // 添加卡片
+    public function store(Request $request, Response $response, array $args)
     {
-        return $this->view->render($response, 'card/show.twig');
+        Card::insert([
+            'title'   => $request->getParam('title'),
+            'user_id' => $_SESSION['user']->id
+        ]);
+
+        return $response->withJson(['code' => 1]);
     }
 }
