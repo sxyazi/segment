@@ -101,8 +101,15 @@
                     <input type="hidden" name="_METHOD" value="PUT">
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary">保存</button>
-                    <a class="btn btn-link" href="#close">关闭</a>
+                    <div class="columns col-gapless">
+                        <div class="column col text-left">
+                            <button class="btn btn-error" type="button" id="delete-item">删除此项目</button>
+                        </div>
+                        <div class="column col col-ml-auto">
+                            <button class="btn btn-primary">保存</button>
+                            <a class="btn btn-link" href="#close">关闭</a>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
@@ -111,16 +118,27 @@
 
 {% block foot %}
     <script>
-        $('.card-list .card').click(function () {
+        function editItem() {
             $('#edit-id').val($(this).data('id'));
             $('#edit-content').val($(this).data('content'));
             location.hash = '#edit-item';
-        });
+        }
+
+        $('.card-list .card').click(editItem);
 
         $('#add-item form').submit(function () {
             $.post('{{ path_for('items.store', { 'id': card_id }) }}', $(this).serialize(), function (res) {
                 location.hash = '';
                 if (res.code === 1) {
+                    $(
+                        '<div class="card" data-id="' + res.id + '" data-content="">' +
+                        '<div class="card-body"></div>' +
+                        '</div>'
+                    ).appendTo($('.card-list'));
+                    $('.card[data-id="' + res.id + '"]').click(editItem);
+                    $('.card[data-id="' + res.id + '"]').data('content', $('#add-content').val());
+                    $('.card[data-id="' + res.id + '"] .card-body').text($('#add-content').val());
+
                     $.notify('添加成功');
                 } else {
                     $.notify('添加失败', 'error');
@@ -134,13 +152,30 @@
             $.post('{{ path_for('items.update', { 'id': card_id }) }}', $(this).serialize(), function (res) {
                 location.hash = '';
                 if (res.code === 1) {
-                    $.notify('修改成功');
+                    $('.card[data-id="' + $('#edit-id').val() + '"]').data('content', $('#edit-content').val());
+                    $('.card[data-id="' + $('#edit-id').val() + '"] .card-body').text($('#edit-content').val());
+                    $.notify('编辑成功');
                 } else {
-                    $.notify('修改失败', 'error');
+                    $.notify('编辑失败', 'error');
                 }
             });
 
             return false;
+        });
+
+        $('#delete-item').click(function () {
+            $.post('{{ path_for('items.destroy', { 'id': card_id }) }}', {
+                'id': $('#edit-id').val(),
+                '_METHOD': 'delete'
+            }, function (res) {
+                location.hash = '';
+                if (res.code === 1) {
+                    $('.card[data-id="' + $('#edit-id').val() + '"]').remove();
+                    $.notify('删除成功');
+                } else {
+                    $.notify('删除失败', 'error');
+                }
+            });
         });
     </script>
 {% endblock %}

@@ -19,6 +19,7 @@ $app->group('/cards', function () {
     $this->get('/{id}/items', 'App\Controllers\ItemController:index')->setName('items.index');
     $this->post('/{id}/items', 'App\Controllers\ItemController:store')->setName('items.store');
     $this->put('/{id}/items', 'App\Controllers\ItemController:update')->setName('items.update');
+    $this->delete('/{id}/items', 'App\Controllers\ItemController:destroy')->setName('items.destroy');
 
 })->add(new \App\Middleware\mustLogin($app->getContainer()->router));
 
