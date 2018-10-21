@@ -63,9 +63,10 @@
 {% block content %}
     <main>
         <h1>
-            {{ card.title }}
+            <span>{{ card.title }}</span>
             <div class="opera">
                 <i class="icon icon-back"></i>
+                <i class="icon icon-edit"></i>
                 <i class="icon icon-delete"></i>
             </div>
         </h1>
@@ -113,10 +114,10 @@
             <form action="">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="form-label" for="edit-content">内容</label>
-                        <textarea class="form-input" id="edit-content" name="content" rows="5"></textarea>
+                        <label class="form-label" for="edit-item-content">内容</label>
+                        <textarea class="form-input" id="edit-item-content" name="content" rows="5"></textarea>
                     </div>
-                    <input type="hidden" id="edit-id" name="id">
+                    <input type="hidden" id="edit-item-id" name="id">
                     <input type="hidden" name="_METHOD" value="PUT">
                 </div>
                 <div class="modal-footer">
@@ -129,6 +130,31 @@
                             <a class="btn btn-link" href="#close">关闭</a>
                         </div>
                     </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal modal-sm" id="edit-card">
+        <a href="#close" class="modal-overlay"></a>
+        <div class="modal-container">
+            <div class="modal-header">
+                <a href="#close" class="btn btn-clear float-right"></a>
+                <div class="modal-title h5">编辑卡片</div>
+            </div>
+            <form action="">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label" for="edit-card-title">标题</label>
+                        <input class="form-input" type="text" id="edit-card-title" name="title"
+                               value="{{ card.title }}">
+                    </div>
+                    <input type="hidden" name="id" value="{{ card.id }}">
+                    <input type="hidden" name="_METHOD" value="PUT">
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary">保存</button>
+                    <a class="btn btn-link" href="#close">关闭</a>
                 </div>
             </form>
         </div>
@@ -153,13 +179,14 @@
 {% block foot %}
     <script>
         function editItem() {
-            $('#edit-id').val($(this).data('id'));
-            $('#edit-content').val($(this).data('content'));
+            $('#edit-item-id').val($(this).data('id'));
+            $('#edit-item-content').val($(this).data('content'));
             location.hash = '#edit-item';
         }
 
         $('.card-list .card').click(editItem);
 
+        // 添加项目
         $('#add-item form').submit(function () {
             $.post('{{ path_for('items.store', { 'id': card.id }) }}', $(this).serialize(), function (res) {
                 location.hash = '';
@@ -184,12 +211,13 @@
             return false;
         });
 
+        // 编辑项目
         $('#edit-item form').submit(function () {
             $.post('{{ path_for('items.update', { 'id': card.id }) }}', $(this).serialize(), function (res) {
                 location.hash = '';
                 if (res.code === 1) {
-                    var itemId = $('#edit-id').val();
-                    var itemContent = $('#edit-content').val();
+                    var itemId = $('#edit-item-id').val();
+                    var itemContent = $('#edit-item-content').val();
 
                     $('.card[data-id="' + itemId + '"]').data('content', itemContent);
                     $('.card[data-id="' + itemId + '"] .card-body').text(itemContent);
@@ -202,14 +230,15 @@
             return false;
         });
 
+        // 删除项目
         $('#delete-item').click(function () {
             $.post('{{ path_for('items.destroy', { 'id': card.id }) }}', {
-                'id': $('#edit-id').val(),
+                'id': $('#edit-item-id').val(),
                 '_METHOD': 'DELETE'
             }, function (res) {
                 location.hash = '';
                 if (res.code === 1) {
-                    $('.card[data-id="' + $('#edit-id').val() + '"]').remove();
+                    $('.card[data-id="' + $('#edit-item-id').val() + '"]').remove();
                     $.notify('删除成功');
                 } else {
                     $.notify('删除失败', 'error');
@@ -217,6 +246,23 @@
             });
         });
 
+        // 编辑卡片
+        $('#edit-card form').submit(function () {
+            console.log(33);
+            $.post('{{ path_for('cards.update') }}', $(this).serialize(), function (res) {
+                location.hash = '';
+                if (res.code === 1) {
+                    $('h1 span').text($('#edit-card-title').val());
+                    $.notify('编辑成功');
+                } else {
+                    $.notify('编辑失败', 'error');
+                }
+            });
+
+            return false;
+        });
+
+        // 删除卡片
         $('#delete-card button').click(function () {
             $.post('{{ path_for('cards.destroy') }}', {
                 'id': '{{ card.id }}',
@@ -233,6 +279,9 @@
 
         $('.opera .icon-back').click(function () {
             location.href = '{{ path_for('cards.index') }}';
+        });
+        $('.opera .icon-edit').click(function () {
+            location.hash = '#edit-card';
         });
         $('.opera .icon-delete').click(function () {
             location.hash = '#delete-card';

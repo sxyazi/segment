@@ -30,6 +30,11 @@ class CardController extends Controller
     // 更新卡片
     public function update(Request $request, Response $response, array $args)
     {
+        Card::whereKey($request->getParam('id'))->update([
+            'title' => $request->getParam('title')
+        ]);
+
+        return $response->withJson(['code' => 1]);
     }
 
     // 销毁卡片
