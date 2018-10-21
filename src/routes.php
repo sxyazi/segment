@@ -20,6 +20,9 @@ $app->group('/cards', function () {
 
     $this->get('', 'App\Controllers\CardController:index')->setName('cards.index');
     $this->post('', 'App\Controllers\CardController:store')->setName('cards.store');
+    $this->put('', 'App\Controllers\CardController:update')->setName('cards.update');
+    $this->delete('', 'App\Controllers\CardController:destroy')->setName('cards.destroy');
+
     $this->get('/{id}/items', 'App\Controllers\ItemController:index')->setName('items.index');
     $this->post('/{id}/items', 'App\Controllers\ItemController:store')->setName('items.store');
     $this->put('/{id}/items', 'App\Controllers\ItemController:update')->setName('items.update');

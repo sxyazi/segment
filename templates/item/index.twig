@@ -4,14 +4,27 @@
     <title>卡片 1</title>
     <style>
         h1 {
+            display: flex;
             margin-bottom: 25px;
             padding-bottom: 10px;
             border-bottom: 1px solid #e4e4e4;
+            justify-content: space-between;
         }
 
         main {
             width: 70%;
             margin: 40px auto;
+        }
+
+        .opera i.icon {
+            color: gray;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 2px;
+        }
+
+        .opera i.icon:hover {
+            color: black;
         }
 
         .card-list .card {
@@ -49,7 +62,13 @@
 
 {% block content %}
     <main>
-        <h1>{{ card.title }}</h1>
+        <h1>
+            {{ card.title }}
+            <div class="opera">
+                <i class="icon icon-back"></i>
+                <i class="icon icon-delete"></i>
+            </div>
+        </h1>
         <div class="card-list">
             {% for v in card.items %}
                 <div class="card" data-id="{{ v.id }}" data-content="{{ v.content }}">
@@ -114,6 +133,21 @@
             </form>
         </div>
     </div>
+
+    <div class="modal modal-sm" id="delete-card">
+        <a href="#close" class="modal-overlay"></a>
+        <div class="modal-container">
+            <div class="modal-header">
+                <a href="#close" class="btn btn-clear float-right"></a>
+                <div class="modal-title h5">确认</div>
+            </div>
+            <div class="modal-body">确定删除这个卡片吗？</div>
+            <div class="modal-footer">
+                <button class="btn btn-primary">删除</button>
+                <a class="btn btn-link" href="#close">关闭</a>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block foot %}
@@ -135,8 +169,10 @@
                         '<div class="card-body"></div>' +
                         '</div>'
                     ).appendTo($('.card-list'));
-                    $('.card[data-id="' + res.id + '"]').click(editItem);
-                    $('.card[data-id="' + res.id + '"]').data('content', $('#add-content').val());
+
+                    $('.card[data-id="' + res.id + '"]')
+                        .click(editItem)
+                        .data('content', $('#add-content').val());
                     $('.card[data-id="' + res.id + '"] .card-body').text($('#add-content').val());
 
                     $.notify('添加成功');
@@ -152,8 +188,11 @@
             $.post('{{ path_for('items.update', { 'id': card.id }) }}', $(this).serialize(), function (res) {
                 location.hash = '';
                 if (res.code === 1) {
-                    $('.card[data-id="' + $('#edit-id').val() + '"]').data('content', $('#edit-content').val());
-                    $('.card[data-id="' + $('#edit-id').val() + '"] .card-body').text($('#edit-content').val());
+                    var itemId = $('#edit-id').val();
+                    var itemContent = $('#edit-content').val();
+
+                    $('.card[data-id="' + itemId + '"]').data('content', itemContent);
+                    $('.card[data-id="' + itemId + '"] .card-body').text(itemContent);
                     $.notify('编辑成功');
                 } else {
                     $.notify('编辑失败', 'error');
@@ -166,7 +205,7 @@
         $('#delete-item').click(function () {
             $.post('{{ path_for('items.destroy', { 'id': card.id }) }}', {
                 'id': $('#edit-id').val(),
-                '_METHOD': 'delete'
+                '_METHOD': 'DELETE'
             }, function (res) {
                 location.hash = '';
                 if (res.code === 1) {
@@ -176,6 +215,27 @@
                     $.notify('删除失败', 'error');
                 }
             });
+        });
+
+        $('#delete-card button').click(function () {
+            $.post('{{ path_for('cards.destroy') }}', {
+                'id': '{{ card.id }}',
+                '_METHOD': 'DELETE'
+            }, function (res) {
+                if (res.code === 1) {
+                    location.href = '{{ path_for('cards.index') }}';
+                } else {
+                    location.hash = '';
+                    $.notify('删除失败', 'error');
+                }
+            });
+        });
+
+        $('.opera .icon-back').click(function () {
+            location.href = '{{ path_for('cards.index') }}';
+        });
+        $('.opera .icon-delete').click(function () {
+            location.hash = '#delete-card';
         });
     </script>
 {% endblock %}
