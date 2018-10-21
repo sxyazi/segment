@@ -4,22 +4,11 @@
 $container = $app->getContainer();
 
 
-// Service factory for the ORM
-$container['db'] = function ($container) {
-    $capsule = new \Illuminate\Database\Capsule\Manager;
-    $capsule->addConnection($container['settings']['db']);
-
-    $capsule->setAsGlobal();
-    $capsule->bootEloquent();
-
-    return $capsule;
-};
-
 // twig-view
 $container['view'] = function ($c) {
     $settings = $c->get('settings')['view'];
 
-    $view = new \Slim\Views\Twig($settings['template_path'], [
+    $view = new Slim\Views\Twig($settings['template_path'], [
         'cache' => $settings['cache_path']
     ]);
 
@@ -43,4 +32,8 @@ $container['logger'] = function ($c) {
     $logger->pushProcessor(new Monolog\Processor\UidProcessor());
     $logger->pushHandler(new Monolog\Handler\StreamHandler($settings['path'], $settings['level']));
     return $logger;
+};
+
+$container['validator'] = function () {
+    return new Awurth\SlimValidation\Validator();
 };

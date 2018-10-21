@@ -1,0 +1,53 @@
+{% extends 'main.twig' %}
+
+{% block head %}
+    <title>注册</title>
+    <style>
+        .card {
+            width: 400px;
+            margin: 80px auto 0;
+        }
+
+        .card-body button {
+            margin-top: 20px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title h4">注册</div>
+        </div>
+        <div class="card-body">
+            <form action="" method="POST">
+                <div class="form-group">
+                    <input class="form-input" type="text" name="name" placeholder="用户名">
+                </div>
+                <div class="form-group">
+                    <input class="form-input" type="password" name="password" placeholder="密码">
+                </div>
+                <div class="form-control text-right">
+                    <button class="btn btn-primary">Register</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block foot %}
+    <script>
+        $('form').submit(function () {
+            $.post('{{ path_for('register') }}', $(this).serialize(), function (res) {
+                if (res.code === 0) {
+                    $.notify(res.msg, 'error');
+                    return;
+                }
+
+                location.href = '{{ path_for('home') }}';
+            });
+
+            return false;
+        });
+    </script>
+{% endblock %}

@@ -5,11 +5,15 @@ use Slim\Http\Response;
 
 // Routes
 
-$app->get('/', 'App\Controllers\HomeController:index');
+$app->get('/', 'App\Controllers\HomeController:index')->setName('home');
 
 // 登录
 $app->get('/login', 'App\Controllers\UserController:login')->setName('login');
 $app->post('/login', 'App\Controllers\UserController:login');
+
+// 注册
+$app->get('/register', 'App\Controllers\UserController:register')->setName('register');
+$app->post('/register', 'App\Controllers\UserController:register');
 
 // 卡片
 $app->group('/cards', function () {

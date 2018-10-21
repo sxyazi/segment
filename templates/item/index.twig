@@ -49,9 +49,9 @@
 
 {% block content %}
     <main>
-        <h1>卡片 1</h1>
+        <h1>{{ card.title }}</h1>
         <div class="card-list">
-            {% for v in items %}
+            {% for v in card.items %}
                 <div class="card" data-id="{{ v.id }}" data-content="{{ v.content }}">
                     <div class="card-body">{{ v.content }}</div>
                 </div>
@@ -127,7 +127,7 @@
         $('.card-list .card').click(editItem);
 
         $('#add-item form').submit(function () {
-            $.post('{{ path_for('items.store', { 'id': card_id }) }}', $(this).serialize(), function (res) {
+            $.post('{{ path_for('items.store', { 'id': card.id }) }}', $(this).serialize(), function (res) {
                 location.hash = '';
                 if (res.code === 1) {
                     $(
@@ -149,7 +149,7 @@
         });
 
         $('#edit-item form').submit(function () {
-            $.post('{{ path_for('items.update', { 'id': card_id }) }}', $(this).serialize(), function (res) {
+            $.post('{{ path_for('items.update', { 'id': card.id }) }}', $(this).serialize(), function (res) {
                 location.hash = '';
                 if (res.code === 1) {
                     $('.card[data-id="' + $('#edit-id').val() + '"]').data('content', $('#edit-content').val());
@@ -164,7 +164,7 @@
         });
 
         $('#delete-item').click(function () {
-            $.post('{{ path_for('items.destroy', { 'id': card_id }) }}', {
+            $.post('{{ path_for('items.destroy', { 'id': card.id }) }}', {
                 'id': $('#edit-id').val(),
                 '_METHOD': 'delete'
             }, function (res) {

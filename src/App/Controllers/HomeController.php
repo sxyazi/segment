@@ -10,6 +10,7 @@ class HomeController extends Controller
 {
     public function index(Request $request, Response $response, array $args)
     {
-        return $response->withRedirect($this->router->pathFor('cards.index'));
+
+//        return $response->withRedirect($this->router->pathFor('cards.index'));
     }
 }

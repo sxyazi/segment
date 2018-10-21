@@ -43,7 +43,7 @@
         <h1>卡片室</h1>
         <div class="container card-list">
             <div class="columns">
-                {% for v in cards %}
+                {% for v in user.cards %}
                     <div class="column col-3">
                         <div class="card" data-id="{{ v.id }}">
                             <div class="card-body">{{ v.title }}</div>
