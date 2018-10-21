@@ -5,15 +5,24 @@ use Slim\Http\Response;
 
 // Routes
 
-$app->get('/', 'App\Controllers\HomeController:index')->setName('home');
 
 // 登录
 $app->get('/login', 'App\Controllers\UserController:login')->setName('login');
 $app->post('/login', 'App\Controllers\UserController:login');
 
+
 // 注册
 $app->get('/register', 'App\Controllers\UserController:register')->setName('register');
 $app->post('/register', 'App\Controllers\UserController:register');
+
+
+$app->group('', function () {
+
+    // 首页
+    $this->get('/', 'App\Controllers\HomeController:index')->setName('home');
+
+})->add(new \App\Middleware\mustLogin($app->getContainer()->router));
+
 
 // 卡片
 $app->group('/cards', function () {
@@ -30,11 +39,3 @@ $app->group('/cards', function () {
 
 })->add(new \App\Middleware\mustLogin($app->getContainer()->router));
 
-//
-//$app->get('/[{name}]', function (Request $request, Response $response, array $args) {
-//    // Sample log message
-//    $this->logger->info("Slim-Skeleton '/' route");
-//
-//    // Render index view
-//    return $this->renderer->render($response, 'index.phtml', $args);
-//});

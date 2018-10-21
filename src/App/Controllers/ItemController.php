@@ -21,6 +21,7 @@ class ItemController extends Controller
     {
         $item = Item::create([
             'card_id' => $args['id'],
+            'user_id' => $_SESSION['user']->id,
             'content' => $request->getParam('content')
         ]);
 
