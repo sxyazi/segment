@@ -30,9 +30,12 @@ class CardController extends Controller
     // 更新卡片
     public function update(Request $request, Response $response, array $args)
     {
-        Card::whereKey($request->getParam('id'))->update([
-            'title' => $request->getParam('title')
-        ]);
+        $card = Card::find($request->getParam('id'));
+        if ($card->user_id === $_SESSION['user']->id) {
+            $card->update([
+                'title' => $request->getParam('title')
+            ]);
+        }
 
         return $response->withJson(['code' => 1]);
     }
@@ -40,7 +43,10 @@ class CardController extends Controller
     // 销毁卡片
     public function destroy(Request $request, Response $response, array $args)
     {
-        Card::whereKey($request->getParam('id'))->delete();
+        $card = Card::find($request->getParam('id'));
+        if ($card->user_id === $_SESSION['user']->id) {
+            $card->delete();
+        }
 
         return $response->withJson(['code' => 1]);
     }

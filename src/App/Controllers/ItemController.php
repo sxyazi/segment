@@ -31,9 +31,12 @@ class ItemController extends Controller
     // 更新项目
     public function update(Request $request, Response $response, array $args)
     {
-        Item::whereKey($request->getParam('id'))->update([
-            'content' => $request->getParam('content')
-        ]);
+        $item = Item::find($request->getParam('id'));
+        if ($item->user_id === $_SESSION['user']->id) {
+            $item->update([
+                'content' => $request->getParam('content')
+            ]);
+        }
 
         return $response->withJson(['code' => 1]);
     }
@@ -41,7 +44,10 @@ class ItemController extends Controller
     // 销毁项目
     public function destroy(Request $request, Response $response, array $args)
     {
-        Item::whereKey($request->getParam('id'))->delete();
+        $item = Item::find($request->getParam('id'));
+        if ($item->user_id === $_SESSION['user']->id) {
+            $item->delete();
+        }
 
         return $response->withJson(['code' => 1]);
     }
