@@ -11,6 +11,14 @@
         .card-body button {
             margin-top: 20px;
         }
+
+        .prompt {
+            color: gray;
+            width: 400px;
+            font-size: 14px;
+            margin: 30px auto;
+            text-align: center;
+        }
     </style>
 {% endblock %}
 
@@ -32,6 +40,9 @@
                 </div>
             </form>
         </div>
+    </div>
+    <div class="prompt">
+        还没有账号？<a href="{{ path_for('register') }}">创建新账号</a>
     </div>
 {% endblock %}
 
