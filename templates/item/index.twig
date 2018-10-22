@@ -201,6 +201,7 @@
                         .click(editItem)
                         .data('content', $('#add-content').val());
                     $('.card[data-id="' + res.id + '"] .card-body').text($('#add-content').val());
+                    $('#add-content').val('');
 
                     $.notify('添加成功');
                 } else {

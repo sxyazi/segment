@@ -111,6 +111,7 @@
                         .find('.card').click(gotoItem)
                         .find('.card-body').text($('#add-title').val());
 
+                    $('#add-title').val('');
                     $.notify('添加成功');
                 } else {
                     $.notify('添加失败', 'error');
