@@ -19,12 +19,12 @@ class CardController extends Controller
     // 保存卡片
     public function store(Request $request, Response $response, array $args)
     {
-        Card::create([
+        $card = Card::create([
             'title'   => $request->getParam('title'),
             'user_id' => $_SESSION['user']->id
         ]);
 
-        return $response->withJson(['code' => 1]);
+        return $response->withJson(['code' => 1, 'id' => $card->id]);
     }
 
     // 更新卡片

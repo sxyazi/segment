@@ -28,6 +28,12 @@ class  UserController extends Controller
         return $this->view->render($response, 'user/login.twig');
     }
 
+    public function logout(Request $request, Response $response)
+    {
+        unset($_SESSION['user']);
+        return $response->withRedirect($this->router->pathFor('login'));
+    }
+
     public function register(Request $request, Response $response)
     {
         if ('POST' == $request->getMethod()) {

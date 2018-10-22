@@ -8,6 +8,7 @@ use Slim\Http\Response;
 
 // 登录
 $app->get('/login', 'App\Controllers\UserController:login')->setName('login');
+$app->get('/logout', 'App\Controllers\UserController:logout')->setName('logout');
 $app->post('/login', 'App\Controllers\UserController:login');
 
 

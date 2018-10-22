@@ -56,6 +56,10 @@
         main .columns .column .content small {
             color: gray;
         }
+        
+        [goto-card] {
+            cursor: pointer;
+        }
     </style>
 {% endblock %}
 
@@ -67,7 +71,7 @@
                     <div class="content">
                         <div class="center">
                             <small>卡片数量</small>
-                            <h3>{{ cardCount }} 张</h3>
+                            <h3 goto-card>{{ cardCount }} 张</h3>
                         </div>
                     </div>
                 </div>
@@ -93,7 +97,7 @@
                     <div class="content">
                         <div class="center">
                             <small>登入账户</small>
-                            <h3>{{ user.name }} <a href="">退出</a></h3>
+                            <h3>{{ user.name }} &nbsp;<a href="{{ path_for('logout') }}">退出</a></h3>
                         </div>
                     </div>
                 </div>
@@ -104,5 +108,8 @@
 
 {% block foot %}
     <script>
+        $('[goto-card]').click(function () {
+            location.href = '{{ path_for('cards.index') }}';
+        });
     </script>
 {% endblock %}

@@ -88,18 +88,29 @@
 
 {% block foot %}
     <script>
-        $('.card').click(function () {
+        function gotoItem() {
             if ($(this).hasClass('add-card')) {
                 return;
             }
 
             location.href = '{{ path_for('items.index', { 'id': '000' }) }}'.replace('000', $(this).data('id'));
-        });
+        }
+
+        $('.card').click(gotoItem);
 
         $('#add-card form').submit(function () {
             $.post('{{ path_for('cards.store') }}', $(this).serialize(), function (res) {
                 location.hash = '';
                 if (res.code === 1) {
+                    $(
+                        '<div class="column col-3">' +
+                        '   <div class="card" data-id="' + res.id + '"><div class="card-body"></div></div>' +
+                        '</div>'
+                    )
+                        .insertBefore($('.add-card').parent())
+                        .find('.card').click(gotoItem)
+                        .find('.card-body').text($('#add-title').val());
+
                     $.notify('添加成功');
                 } else {
                     $.notify('添加失败', 'error');
