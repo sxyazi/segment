@@ -51,7 +51,7 @@
         $('form').submit(function () {
             $.post('{{ path_for('login') }}', $(this).serialize(), function (res) {
                 if (res.code === 1) {
-                    {#location.href = '{{ path_for('cards.index') }}';#}
+                    location.href = '{{ path_for('cards.index') }}';
                     return;
                 }
 
