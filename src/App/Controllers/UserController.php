@@ -3,12 +3,15 @@
 namespace App\Controllers;
 
 use App\Models\User;
+use App\Traits\Hash;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Respect\Validation\Validator as V;
 
 class  UserController extends Controller
 {
+    use Hash;
+
     public function login(Request $request, Response $response)
     {
         if ('POST' == $request->getMethod()) {
@@ -17,7 +20,7 @@ class  UserController extends Controller
                 return $response->withJson(['code' => 0, 'msg' => '用户不存在！']);
             }
 
-            if (md5($request->getParam('password')) !== $user->password) {
+            if (!Hash::check($request->getParam('password'), $user->password, $this->config->web->salt)) {
                 return $response->withJson(['code' => 0, 'msg' => '密码错误！']);
             }
 
@@ -38,8 +41,8 @@ class  UserController extends Controller
     {
         if ('POST' == $request->getMethod()) {
             $validator = $this->validator->validate($request, [
-                'name'     => V::length(4, 25)->alnum('_')->noWhitespace()->unique(User::class, 'name'),
-                'password' => V::length(8, 30)->alnum('_')->noWhitespace()
+                'name'     => V::length(4, 25)->alnum()->noWhitespace()->unique(User::class, 'name'),
+                'password' => V::length(8, 30)->noWhitespace()
             ]);
 
             if (!$validator->isValid()) {
@@ -49,7 +52,7 @@ class  UserController extends Controller
 
             $user = User::create([
                 'name'     => $request->getParam('name'),
-                'password' => $request->getParam('password')
+                'password' => Hash::make($request->getParam('password'), $this->config->web->salt)
             ]);
             $_SESSION['user'] = $user;
 

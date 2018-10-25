@@ -37,3 +37,7 @@ $container['logger'] = function ($c) {
 $container['validator'] = function () {
     return new Awurth\SlimValidation\Validator();
 };
+
+$container['config'] = function ($c) {
+    return new \App\Classes\Getter($c->get('settings'));
+};

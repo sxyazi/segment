@@ -18,7 +18,8 @@
         "monolog/monolog": "^1.17",
         "illuminate/database": "~5.1",
         "slim/twig-view": "^2.4",
-        "awurth/slim-validation": "^3.0"
+        "awurth/slim-validation": "^3.0",
+        "vlucas/phpdotenv": "^2.5"
     },
     "require-dev": {
         "phpunit/phpunit": ">=4.8 < 6.0"
